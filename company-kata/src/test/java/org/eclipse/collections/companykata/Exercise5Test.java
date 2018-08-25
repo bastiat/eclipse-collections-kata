@@ -21,6 +21,7 @@ import org.eclipse.collections.impl.block.factory.Predicates;
 import org.eclipse.collections.impl.block.factory.primitive.DoublePredicates;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.factory.primitive.DoubleLists;
+import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.collections.impl.test.Verify;
 import org.eclipse.collections.impl.utility.Iterate;
 import org.junit.Assert;
@@ -45,8 +46,8 @@ public class Exercise5Test extends CompanyDomainForKata
     @Test
     public void filterOrderValues()
     {
-        List<Order> orders = this.company.getMostRecentCustomer().getOrders();
-        MutableList<Double> orderValues = null;
+        FastList<Order> orders = this.company.getMostRecentCustomer().getOrders();
+        MutableList<Double> orderValues = orders.collect(Order::getValue);
         MutableList<Double> filtered = orderValues.select(Predicates.greaterThan(1.5));
 
         Assert.assertEquals(Lists.mutable.with(372.5, 1.75), filtered);
@@ -61,8 +62,8 @@ public class Exercise5Test extends CompanyDomainForKata
     @Test
     public void filterOrderValuesUsingPrimitives()
     {
-        List<Order> orders = this.company.getMostRecentCustomer().getOrders();
-        MutableDoubleList orderValues = null;
+        MutableList<Order> orders = this.company.getMostRecentCustomer().getOrders();
+        MutableDoubleList orderValues = orders.collectDouble(Order::getValue);
         MutableDoubleList filtered = orderValues.select(DoublePredicates.greaterThan(1.5));
 
         Assert.assertEquals(DoubleLists.mutable.with(372.5, 1.75), filtered);
@@ -76,8 +77,8 @@ public class Exercise5Test extends CompanyDomainForKata
     @Test
     public void filterOrders()
     {
-        List<Order> orders = this.company.getMostRecentCustomer().getOrders();
-        MutableList<Order> filtered = null;
+        MutableList<Order> orders = this.company.getMostRecentCustomer().getOrders();
+        MutableList<Order> filtered = orders.select(o->o.getValue()>2);
 
         Assert.assertEquals(Lists.mutable.with(Iterate.getFirst(this.company.getMostRecentCustomer().getOrders())), filtered);
         Verify.assertInstanceOf(MutableList.class, this.company.getMostRecentCustomer().getOrders());
